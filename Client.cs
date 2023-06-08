@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.FiveM;
 using System.Dynamic;
 using System;
 using CitizenFX.FiveM.Native;
@@ -9,6 +8,7 @@ namespace c_zones_influence
     public class Client : BaseScript
     {
         private string gang = "none";
+        private bool loop = false;
         public Client()
         {
             EventHandlers["onClientResourceStart"] += Func.Create<string>(OnClientResourceStart);
@@ -21,7 +21,7 @@ namespace c_zones_influence
                 return;
             }
 
-            Events.RegisterEventHandler("QBCore:Client:OnGangUpdate", Func.Create<ExpandoObject>(setgang), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:setgang", Func.Create<string>(setgang), Binding.All);
             //setgang("Vagos"); //test
 
             Natives.RegisterNuiCallbackType("c_influence");
@@ -31,12 +31,31 @@ namespace c_zones_influence
             Natives.RegisterCommand("test", new Action(test), false);
         }
 
-        private void setgang(dynamic data)
+        private void setgang(string gangName)
         {
-            gang = data.name;
+            gang = gangName;
             if (gang != "none")
             {
-                //do something
+                if (!loop) 
+                {
+                    Debug.WriteLine("dziala");
+                    _ = occupation();
+                    loop = true;
+                }
+            }
+            else 
+            {
+                loop = false;
+            }
+        }
+
+        private async Coroutine occupation() 
+        {
+            while (loop) 
+            {
+                await Wait(1000 * 10);
+                Vector3 coords = Natives.GetEntityCoords(Natives.PlayerPedId(), false);
+                Natives.SendNuiMessage("{\"action\":\"check\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + "}");
             }
         }
 
