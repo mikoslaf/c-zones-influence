@@ -6,7 +6,7 @@ namespace Server
     {
         public Server() 
         {
-            Debug.WriteLine("dziala");
+            Debug.WriteLine("dziala 123");
         }
     }
 }
