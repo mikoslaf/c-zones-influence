@@ -32,11 +32,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core">
-      <HintPath>..\..\..\..\..\..\..\..\..\fivem\FiveM.app\citizen\clr2\lib\mono\4.5\v2\CitizenFX.Core.dll</HintPath>
+      <HintPath>..\..\c-zones-influence\client\CitizenFX.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="CitizenFX.FiveM">
-      <HintPath>..\..\..\..\..\..\..\..\..\fivem\FiveM.app\citizen\clr2\lib\mono\4.5\v2\CitizenFX.FiveM.dll</HintPath>
+      <HintPath>..\..\c-zones-influence\client\CitizenFX.FiveM.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="CitizenFX.FiveM.Native">
