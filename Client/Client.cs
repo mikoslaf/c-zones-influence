@@ -34,6 +34,7 @@ namespace c_zones_influence
         private void setgang(string gangName)
         {
             gang = gangName;
+            Events.TriggerServerEvent("c-zones-influence:addplayer", gang);
             if (gang != "none")
             {
                 if (!loop) 
@@ -61,6 +62,7 @@ namespace c_zones_influence
 
         private void test()
         {
+            Debug.WriteLine(Natives.GetPlayerServerId(Natives.PlayerId()).ToString());
             Vector3 coords = Natives.GetEntityCoords(Natives.PlayerPedId(), false);
             Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + "}");
         }
