@@ -22,7 +22,7 @@ namespace Server
             Events.RegisterEventHandler("c-zones-influence:addplayer", Func.Create<Player, string>(addplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:alarmplayer", Func.Create<string, string>(alarmplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:setzones", Func.Create<dynamic>(setzones), Binding.All);
-            Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string>(influence), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string, string, string>(influence), Binding.All);
         }
 
         private void setzones(dynamic data) 
@@ -88,7 +88,7 @@ namespace Server
             }
         }
 
-        private void influence(int id, double val, string gang) 
+        private void influence(int id, double val, string gang, string note, string name) 
         {
             if (Zones[id].gang == gang)
             {
@@ -120,8 +120,15 @@ namespace Server
                 {
                     Zones[id].val = remove;
                     Events.TriggerEvent("qb-handler:c-zones-influence:influence", id, Zones[id].val);
+
+                    if (Zones[id].val > 0.75) 
+                    {
+                        // message
+                    }
                 }
             }
+
+
 
             foreach (KeyValuePair<int, Zone> v in Zones)
             {

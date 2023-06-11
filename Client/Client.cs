@@ -74,11 +74,11 @@ namespace c_zones_influence
 
             if (note == "")
             {
-                Natives.SendNuiMessage("{\"action\":\"start\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"v\":" + val.ToString() + "}");
+                Natives.SendNuiMessage("{\"action\":\"check\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"v\":" + val.ToString() + "}");
             }
             else 
             {
-                Natives.SendNuiMessage("{\"action\":\"start\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"v\":" + val.ToString() + ", \"n\": "+ note +"}");
+                Natives.SendNuiMessage("{\"action\":\"check\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"v\":" + val.ToString() + ", \"n\": "+ note +"}");
             }
          }
 
@@ -87,9 +87,16 @@ namespace c_zones_influence
             if (gang != "none")
             {
                 //byte zone = Convert.ToByte(data.zone);
-                int zone = data.zone;
+                int zone = (int)data.zone;
                 double val = data.val;
-                Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang);
+                if (data.note == "") 
+                {
+                    Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang);
+                }
+                else 
+                {
+                    Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang, data.note, data.name);
+                }
             }
         }
     }

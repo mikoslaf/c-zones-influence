@@ -73,6 +73,7 @@ function search_map(x,y,v = 0.001,n,praw = false) {
       $.post("https://c-zones-influence/c_influence", JSON.stringify({
         zone: x+y,
         val: v,
+        note: ""
       }));
     }
     else {
