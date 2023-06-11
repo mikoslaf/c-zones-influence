@@ -13,16 +13,16 @@ namespace Server
     }
     public class Server: BaseScript
     {
-        private Dictionary<string, List<int>> influencers = new Dictionary<string, List<int>>();
-        private Dictionary<int, Zone> Zones = new Dictionary<int, Zone>();
+        private readonly Dictionary<string, List<int>> influencers = new Dictionary<string, List<int>>();
+        private readonly Dictionary<int, Zone> Zones = new Dictionary<int, Zone>();
         public Server() 
         {
             Debug.WriteLine("1234");
 
-            //EventHandlers["chatMessage"] += Func.Create<int, string, string>(addplayer);
             Events.RegisterEventHandler("c-zones-influence:addplayer", Func.Create<Player, string>(addplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:alarmplayer", Func.Create<string, string>(alarmplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:setzones", Func.Create<dynamic>(setzones), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string>(influence), Binding.All);
         }
 
         private void setzones(dynamic data) 
@@ -82,14 +82,10 @@ namespace Server
 
         private void alarmplayer(string gang, string note) 
         {
-            //foreach (KeyValuePair<int, string> v in influencers)
-            //{
-            //    if (v.Value == gang) 
-            //    {
-            //        Debug.Write("alarm player {0}", v.Key);
-            //    }
-            //    Debug.WriteLine("Key = {0}, Value = {1}", v.Key, v.Value);
-            //}
+            foreach (var v in influencers[gang])
+            {
+                Debug.WriteLine($"dawd {v}");
+            }
         }
 
         private void influence(int id, double val, string gang) 

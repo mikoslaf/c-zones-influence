@@ -39,9 +39,9 @@ const zones = {
 
 window.addEventListener("message", function (event) {   
     if(event.data.action == "check") {
-     search_map(event.data.x, event.data.y, event.data.v)
+     search_map(event.data.x, event.data.y, event.data.v, event.data.n)
     } else if (event.data.action == "start") {
-      search_map(event.data.x, event.data.y, event.data.v, true)
+      search_map(event.data.x, event.data.y, event.data.v, "", true)
     }
   });
 
@@ -58,7 +58,7 @@ obraz
 x = 900 | 500
 y = 1400 | 500
  */
-function search_map(x,y,v = 0.001,praw = false) {
+function search_map(x,y,v = 0.001,n,praw = false) {
     console.log(x);
     console.log(y);
     const c = document.getElementById("myCanvas");
@@ -67,13 +67,22 @@ function search_map(x,y,v = 0.001,praw = false) {
     ctx.drawImage(img, 0, 0);
     const imgData = ctx.getImageData(0, 0, c.width, c.height);
     
-    x = Math.round(((2234 + parseInt(x))/4116)* 500) * 4;
-    y = Math.round((1 - ((3415 + parseInt(y))/3875)) * 500) * 500 * 4;
-
-    $.post("https://c-zones-influence/c_influence", JSON.stringify({
-      zone: 1,
-      val: v
-    }));
+    x = Math.round(((2234 + parseInt(x))/4116)* c.width) * 4;
+    y = Math.round((1 - ((3415 + parseInt(y))/3875)) * c.width) * c.height * 4;
+    if(n == "") {
+      $.post("https://c-zones-influence/c_influence", JSON.stringify({
+        zone: x+y,
+        val: v,
+      }));
+    }
+    else {
+      $.post("https://c-zones-influence/c_influence", JSON.stringify({
+        zone: x+y,
+        val: v,
+        note: n,
+        name: zones[x+y]
+      }));
+    }
     if(praw) {
       console.log(imgData.data[x+y]);
     $("canvas").css("display","block");

@@ -22,6 +22,7 @@ namespace c_zones_influence
             }
 
             Events.RegisterEventHandler("c-zones-influence:setgang", Func.Create<string>(setgang), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:influence", Func.Create<double, string>(start_influence), Binding.All);
             //setgang("Vagos"); //test
 
             Natives.RegisterNuiCallbackType("c_influence");
@@ -67,14 +68,28 @@ namespace c_zones_influence
             Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + "}");
         }
 
+        private void start_influence(double val = 0.001, string note = "")
+        {
+            Vector3 coords = Natives.GetEntityCoords(Natives.PlayerPedId(), false);
+
+            if (note == "")
+            {
+                Natives.SendNuiMessage("{\"action\":\"start\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"v\":" + val.ToString() + "}");
+            }
+            else 
+            {
+                Natives.SendNuiMessage("{\"action\":\"start\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"v\":" + val.ToString() + ", \"n\": "+ note +"}");
+            }
+         }
+
         private void influence(dynamic data) 
         {
             if (gang != "none")
             {
                 //byte zone = Convert.ToByte(data.zone);
-                uint zone = data.zone;
+                int zone = data.zone;
                 double val = data.val;
-                Events.TriggerServerEvent("qb-handler:c-zones-influence:influence",zone,val,gang);
+                Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang);
             }
         }
     }
