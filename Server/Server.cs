@@ -7,8 +7,8 @@ namespace Server
 {
     public class Zone
     {
-        private string gang { get; set; }
-        private float val { get; set; }
+        public string gang { get; set; }
+        public float val { get; set; }
     }
     public class Server: BaseScript
     {
@@ -26,16 +26,10 @@ namespace Server
 
         private void setzones(dynamic data) 
         {
-            Debug.WriteLine($"{data}");
             foreach (var item in data)
             {
-                string key = item.Key;
-                string gang = item.Value.gang;
-                double val = item.Value.val;
-
-                Console.WriteLine($"Key: {key}, Gang: {gang}, Value: {val}");
+                Zones.Add(Convert.ToInt32(item.Key), new Zone { gang = item.Value.gang, val = (float)item.Value.val });
             }
-            //Zones.Add(0, new Zone { });
         }
         private void addplayer([Source] Player source, string gang) 
         {
