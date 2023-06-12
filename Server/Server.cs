@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Server;
+using CitizenFX.Server.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Server
 {
@@ -13,17 +15,19 @@ namespace Server
     }
     public class Server: BaseScript
     {
-        private readonly Dictionary<string, List<int>> influencers = new Dictionary<string, List<int>>();
+        private readonly Dictionary<string, List<Player>> influencers = new Dictionary<string, List<Player>>();
         private readonly Dictionary<int, Zone> Zones = new Dictionary<int, Zone>();
         public Server() 
         {
-            Debug.WriteLine("1234");
-
             Events.RegisterEventHandler("c-zones-influence:addplayer", Func.Create<Player, string>(addplayer), Binding.All);
-            Events.RegisterEventHandler("c-zones-influence:alarmplayer", Func.Create<string, string>(alarmplayer), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:alarmplayer", Func.Create<string, string, string>(alarmplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:setzones", Func.Create<dynamic>(setzones), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string, string, string>(influence), Binding.All);
-        }
+            //Natives.RegisterCommand("testargs", new Action(() =>
+            //{
+            //    alarmplayer("vagos", "Uwaga", "rancho");
+            //}),false);
+            }
 
         private void setzones(dynamic data) 
         {
@@ -38,11 +42,11 @@ namespace Server
             {
                 foreach (var v in influencers.Values)
                 {
-                    if (v.Remove(source.Handle)) 
+                    if (v.Remove(source)) 
                     {
                         if (v.Count == 0) 
                         {
-                            foreach (KeyValuePair<string, List<int>> i in influencers)
+                            foreach (KeyValuePair<string, List<Player>> i in influencers)
                             {
                                 if (!i.Value.Any()) 
                                 {
@@ -59,18 +63,18 @@ namespace Server
             {
                 if (influencers.ContainsKey(gang))
                 {
-                    if (!influencers[gang].Exists(x => x == source.Handle)) 
+                    if (!influencers[gang].Exists(x => x == source)) 
                     {
-                        influencers[gang].Add(source.Handle);
+                        influencers[gang].Add(source);
                     }
                 }
                 else 
                 {
-                    influencers.Add(gang,new List<int> { source.Handle });
+                    influencers.Add(gang,new List<Player> { source });
                 }
             }
 
-            foreach (KeyValuePair<string, List<int>> v in influencers)
+            foreach (KeyValuePair<string, List<Player>> v in influencers) // debug to delete
             {
                 Debug.WriteLine("Key = {0}, Value = {1}", v.Key, v.Value);
                 foreach (var item in v.Value) 
@@ -80,11 +84,11 @@ namespace Server
             }
         }
 
-        private void alarmplayer(string gang, string note) 
+        private void alarmplayer(string gang, string note, string zone) 
         {
             foreach (var v in influencers[gang])
             {
-                Debug.WriteLine($"dawd {v}");
+                Events.TriggerClientEvent("QBCore:Notify", v, zone + " | " + note, "error", 8000);
             }
         }
 
@@ -123,7 +127,7 @@ namespace Server
 
                     if (Zones[id].val > 0.75) 
                     {
-                        // message
+                        alarmplayer(Zones[id].gang, note, name);
                     }
                 }
             }
