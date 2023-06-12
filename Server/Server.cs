@@ -23,11 +23,11 @@ namespace Server
             Events.RegisterEventHandler("c-zones-influence:alarmplayer", Func.Create<string, string, string>(alarmplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:setzones", Func.Create<dynamic>(setzones), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string, string, string>(influence), Binding.All);
-            //Natives.RegisterCommand("testargs", new Action(() =>
-            //{
-            //    alarmplayer("vagos", "Uwaga", "rancho");
-            //}),false);
-            }
+            Natives.RegisterCommand("testargs", new Action(() =>
+            {
+                alarmplayer("vagos", "Ktoś sprzedaje narkotyki na twojej okolicy!", "Rancho");
+            }), false);
+        }
 
         private void setzones(dynamic data) 
         {
