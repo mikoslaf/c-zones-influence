@@ -12,7 +12,7 @@ canvas {
     background-size: cover; 
 }
 .container {
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -20,7 +20,6 @@ canvas {
   
 .popup {
     display: flex;
-    background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     overflow: hidden;
@@ -37,13 +36,28 @@ canvas {
 }
   
 .content-container {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 20px;
+    box-shadow: inset 0px 0px 30px 5px rgba(10, 10, 10, 0.4);
 }
 
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 35px;
+    font-weight: 500;
+    border: none;
+    background: none;
+    border-radius: 100%;
+}
+.close-button:hover {
+    text-shadow: 0px 0px 15px black;
+}
 .title {
     font-size: 24px;
     margin-bottom: 10px;
@@ -57,13 +71,13 @@ canvas {
 }
   
 .notification-container {
-    background-color: #222;
+    box-shadow: inset 0px 0px 30px 5px rgba(10, 10, 10, 0.3);
     padding: 10px;
     border-radius: 5px;
     max-height: 200px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #34495e #ecf0f1;
+    scrollbar-color: #000000 #ffffff;
 }
   
 .notification-container::-webkit-scrollbar {
@@ -72,12 +86,12 @@ canvas {
 }
   
 .notification-container::-webkit-scrollbar-thumb {
-    background-color: #34495e;
+    background-color: #000000;
     border-radius: 0 5px 5px 0;
 }
   
 .notification-container::-webkit-scrollbar-thumb:hover {
-    background-color: #2c3e50;
+    background-color: #383838;
 }
   
 .notification-container::-webkit-scrollbar-thumb::after {
@@ -91,18 +105,21 @@ canvas {
   
 .notification {
     margin-bottom: 10px;
-    padding: 10px;
-    color: #fff;
+    padding: 7px 10px;
+    color: black;
+    box-shadow: inset 0px 0px 15px 1px rgba(10, 10, 10, 0.2);
+    border-radius: 5px;
 }
   
 .notification .title-p {
-    color: white;
+    color: black;
     font-size: 18px;
-    margin-bottom: 5px;
+    margin: 5px auto;
 }
   
 .notification .description {
     color: #8f8f8f;
     font-size: 14px;
+    margin: 7px auto;
 }
   

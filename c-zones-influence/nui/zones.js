@@ -126,16 +126,6 @@ function search_map(lx,ly,v = 0.001, n, gang = "") {
         }
       }
       ctx.putImageData(imgData, 0, 0);
-
-      setTimeout(() => {
-        // for (let i = 0; i < imgData.data.length; i += 4) {
-        //   //console.log(imgData.data[i] + ", " + imgData.data[i+1] + ", " + imgData.data[i +2] + ", " + imgData.data[i +3])
-        //   imgData.data[i+3] = 0;
-        // }
-        // ctx.putImageData(imgData, 0, 0);
-        $(".container").css("display","none");
-      }, 5000);
-
     }
 }
 
