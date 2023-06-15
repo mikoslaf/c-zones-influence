@@ -8,8 +8,10 @@ ui_page 'nui/index.html'
 files {
     'nui/index.html',
     'nui/zones.js',
-    'nui/mapa2.jpeg',
-    'nui/code.jquery.com_jquery-3.7.0.min.js'
+    'nui/mapa.png',
+    'nui/style.css',
+    'nui/code.jquery.com_jquery-3.7.0.min.js',
+    'nui/mapa6.jpeg'
 }
 
 client_scripts {
