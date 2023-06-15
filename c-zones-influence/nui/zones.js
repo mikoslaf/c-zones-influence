@@ -44,7 +44,13 @@ window.addEventListener("message", function (event) {
     } else if (event.data.action == "start") {
       search_map(event.data.x, event.data.y, event.data.v, "", event.data.gang)
     }
+});
+$( function() {
+  $(".close-button").on("click", () => {
+    $(".container").css("display","none");
+    $.post("https://c-zones-influence/c_close", JSON.stringify({}));
   });
+});
 
 /*
 lewo = -3428 | -2234

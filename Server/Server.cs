@@ -127,7 +127,10 @@ namespace Server
 
                     if (Zones[id].val > 0.75) 
                     {
-                        alarmplayer(Zones[id].gang, note, name);
+                        if(note  != "")
+                        {
+                            alarmplayer(Zones[id].gang, note, name);
+                        }
                     }
                 }
             }

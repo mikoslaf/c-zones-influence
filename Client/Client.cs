@@ -27,6 +27,10 @@ namespace c_zones_influence
 
             Natives.RegisterNuiCallbackType("c_influence");
             EventHandlers["__cfx_nui:c_influence"] += Func.Create<ExpandoObject>(influence);
+
+            Natives.RegisterNuiCallbackType("c_close");
+            EventHandlers["__cfx_nui:c_close"] += Func.Create(close);
+
             EventHandlers["QBCore:Client:OnGangUpdate"] += Func.Create<string>(setgang);
 
             Natives.RegisterCommand("test", new Action(test), false);
@@ -66,6 +70,7 @@ namespace c_zones_influence
             Debug.WriteLine(Natives.GetPlayerServerId(Natives.PlayerId()).ToString());
             setgang("vagos");
             Vector3 coords = Natives.GetEntityCoords(Natives.PlayerPedId(), false);
+            Natives.SetNuiFocus(true, true);
             Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"gang\":\""+ gang + "\"}");
         }
 
@@ -92,13 +97,18 @@ namespace c_zones_influence
                 double val = data.val;
                 if (data.note == "") 
                 {
-                    Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang);
+                    Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang, "", "");
                 }
                 else 
                 {
                     Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang, data.note, data.name);
                 }
             }
+        }
+
+        private void close()
+        {
+            Natives.SetNuiFocus(false, false);
         }
     }
 }
