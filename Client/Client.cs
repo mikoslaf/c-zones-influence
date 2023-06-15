@@ -64,8 +64,9 @@ namespace c_zones_influence
         private void test()
         {
             Debug.WriteLine(Natives.GetPlayerServerId(Natives.PlayerId()).ToString());
+            setgang("vagos");
             Vector3 coords = Natives.GetEntityCoords(Natives.PlayerPedId(), false);
-            Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + "}");
+            Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"gang\":\""+ gang + "\"}");
         }
 
         private void start_influence(double val = 0.001, string note = "")

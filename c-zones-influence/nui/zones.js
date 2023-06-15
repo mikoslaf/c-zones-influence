@@ -42,7 +42,7 @@ window.addEventListener("message", function (event) {
     if(event.data.action == "check") {
      search_map(event.data.x, event.data.y, event.data.v, event.data.n)
     } else if (event.data.action == "start") {
-      search_map(event.data.x, event.data.y, event.data.v, "", true)
+      search_map(event.data.x, event.data.y, event.data.v, "", event.data.gang)
     }
   });
 
@@ -59,7 +59,7 @@ obraz
 x = 900 | 500
 y = 1400 | 500
  */
-function search_map(lx,ly,v = 0.001,n,praw = false) {
+function search_map(lx,ly,v = 0.001, n, gang = "") {
     const c = document.getElementById("myCanvas");
     const ctx = c.getContext("2d");
     const img = document.getElementById("scream");
@@ -104,37 +104,37 @@ function search_map(lx,ly,v = 0.001,n,praw = false) {
       }));
     }
     
-    if(praw) {
-      console.log(result);
-    $(".container").css("display","flex");
-    // for (let i = x+y+4; i < (x + y + 200); i += 4) {
-    //   imgData.data[i] = 247;
-    //   imgData.data[i+1] = 255;
-    //   imgData.data[i+2] = 0;
-    //   imgData.data[i+3] = 255;
-    // }
-    console.log(imgData.data.length);
-    for (let i = 0; i < imgData.data.length; i += 4) {
-      if(imgData.data[i] == result) {
-        imgData.data[i] = 255;
-        imgData.data[i+1] = 0;
-        imgData.data[i+2] = 0;
-        imgData.data[i+3] = 155;
-      } else {
-        imgData.data[i+3] = 155;
-        if(imgData.data[i] == 0) imgData.data[i+3] = 0; 
-      }
-    }
-    ctx.putImageData(imgData, 0, 0);
-
-    setTimeout(() => {
-      // for (let i = 0; i < imgData.data.length; i += 4) {
-      //   //console.log(imgData.data[i] + ", " + imgData.data[i+1] + ", " + imgData.data[i +2] + ", " + imgData.data[i +3])
-      //   imgData.data[i+3] = 0;
+    if(gang != "") {
+      $(".title").html("Gang: " + gang);
+      $(".container").css("display","flex");
+      // for (let i = x+y+4; i < (x + y + 200); i += 4) {
+      //   imgData.data[i] = 247;
+      //   imgData.data[i+1] = 255;
+      //   imgData.data[i+2] = 0;
+      //   imgData.data[i+3] = 255;
       // }
-      // ctx.putImageData(imgData, 0, 0);
-      $(".container").css("display","none");
-    }, 5000);
+      console.log(imgData.data.length);
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        if(imgData.data[i] == result) {
+          imgData.data[i] = 255;
+          imgData.data[i+1] = 0;
+          imgData.data[i+2] = 0;
+          imgData.data[i+3] = 155;
+        } else {
+          imgData.data[i+3] = 155;
+          if(imgData.data[i] == 0) imgData.data[i+3] = 0; 
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+
+      setTimeout(() => {
+        // for (let i = 0; i < imgData.data.length; i += 4) {
+        //   //console.log(imgData.data[i] + ", " + imgData.data[i+1] + ", " + imgData.data[i +2] + ", " + imgData.data[i +3])
+        //   imgData.data[i+3] = 0;
+        // }
+        // ctx.putImageData(imgData, 0, 0);
+        $(".container").css("display","none");
+      }, 5000);
 
     }
 }
@@ -144,7 +144,7 @@ function addNotification(title, description) {
   notification.classList.add("notification");
 
   const titleElement = document.createElement("h2");
-  titleElement.classList.add("title");
+  titleElement.classList.add("title-p");
   titleElement.textContent = title;
 
   const descriptionElement = document.createElement("p");

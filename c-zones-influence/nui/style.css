@@ -43,7 +43,7 @@ canvas {
     justify-content: center;
     padding: 20px;
 }
-  
+
 .title {
     font-size: 24px;
     margin-bottom: 10px;
@@ -95,7 +95,7 @@ canvas {
     color: #fff;
 }
   
-.notification .title {
+.notification .title-p {
     color: white;
     font-size: 18px;
     margin-bottom: 5px;
