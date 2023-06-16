@@ -37,6 +37,7 @@ const zones = {
   235:"La Puerta",
   249:"Los Santos International Airport"
 }
+let imgData = null;
 
 window.addEventListener("message", function (event) {   
     if(event.data.action == "check") {
@@ -65,15 +66,23 @@ obraz
 x = 900 | 500
 y = 1400 | 500
  */
+
+function create_canvas() {
+  const c = document.getElementById("myCanvas");
+  const ctx = c.getContext("2d");
+  const img = document.getElementById("scream");
+  ctx.drawImage(img, 0, 0);
+  imgData = ctx.getImageData(0, 0, c.width, c.height);
+  console.log('jeden');
+  return;
+}
 function search_map(lx,ly,v = 0.001, n, gang = "") {
-    const c = document.getElementById("myCanvas");
-    const ctx = c.getContext("2d");
-    const img = document.getElementById("scream");
-    ctx.drawImage(img, 0, 0);
-    const imgData = ctx.getImageData(0, 0, c.width, c.height);
-    
-    const x = Math.round(((2234 + parseInt(lx))/4116)* c.width) * 4;
-    const y = Math.round((1 - ((3415 + parseInt(ly))/3875)) * c.width) * c.height * 4;
+    if(imgData == null) {
+      Promise.create_canvas();
+      console.log('dwa');
+    }
+    const x = Math.round(((2234 + parseInt(lx))/4116)* 500) * 4;
+    const y = Math.round((1 - ((3415 + parseInt(ly))/3875)) * 500) * 500 * 4;
     let result = imgData.data[x+y];
     if(result == 1 || result == undefined) return;
     console.log(result);
@@ -113,13 +122,6 @@ function search_map(lx,ly,v = 0.001, n, gang = "") {
     if(gang != "") {
       $(".title").html("Gang: " + gang);
       $(".container").css("display","flex");
-      // for (let i = x+y+4; i < (x + y + 200); i += 4) {
-      //   imgData.data[i] = 247;
-      //   imgData.data[i+1] = 255;
-      //   imgData.data[i+2] = 0;
-      //   imgData.data[i+3] = 255;
-      // }
-      console.log(imgData.data.length);
       for (let i = 0; i < imgData.data.length; i += 4) {
         if(imgData.data[i] == result) {
           imgData.data[i] = 255;
@@ -133,6 +135,11 @@ function search_map(lx,ly,v = 0.001, n, gang = "") {
       }
       ctx.putImageData(imgData, 0, 0);
     }
+}
+
+function view_map(x,y,gang)
+{
+
 }
 
 function addNotification(title, description) {

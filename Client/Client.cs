@@ -9,6 +9,7 @@ namespace c_zones_influence
     {
         private string gang = "none";
         private bool loop = false;
+        private string[] notes = new string[10];
         public Client()
         {
             EventHandlers["onClientResourceStart"] += Func.Create<string>(OnClientResourceStart);
@@ -35,7 +36,32 @@ namespace c_zones_influence
 
             Natives.RegisterCommand("test", new Action(test), false);
         }
+        private void addnote(string zone, string note) 
+        {
+            bool found = true;
+            for (int i = 0; i < notes.Length; i+=2) 
+            {
+                if (notes[i] == null)
+                {
+                    notes[i] = zone;
+                    notes[i+1] = note;
+                    found = false;
+                    break;
+                }
+            }
 
+            if (found) 
+            {
+                for (int i = 0; i < notes.Length-2; i += 2)
+                {
+                    notes[i] = notes[i+2];
+                    notes[i + 1] = notes[i + 3];
+                }
+                notes[notes.Length - 2] = zone;
+                notes[notes.Length - 1] = note;
+            }
+
+        }
         private void setgang(string gangName)
         {
             gang = gangName;
