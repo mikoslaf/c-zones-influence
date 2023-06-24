@@ -1,3 +1,4 @@
+import { gang_color } from "config.js";
 const zones = {
   1:"none",
   4:"Richman",
@@ -38,11 +39,13 @@ const zones = {
   249:"Los Santos International Airport"
 }
 let imgData = null;
-
+let ctx = null;
 window.addEventListener("message", function (event) {   
     if(event.data.action == "check") {
      search_map(event.data.x, event.data.y, event.data.v, event.data.n)
-    } else if (event.data.action == "start") {
+    } else if (event.data.action == "map") {
+      search_map(event.data.x, event.data.gang)
+    }else if (event.data.action == "start") {
       search_map(event.data.x, event.data.y, event.data.v, "", event.data.gang)
     }
 });
@@ -67,18 +70,19 @@ x = 900 | 500
 y = 1400 | 500
  */
 
-function create_canvas() {
+async function create_canvas() {
   const c = document.getElementById("myCanvas");
-  const ctx = c.getContext("2d");
+  ctx = c.getContext("2d");
   const img = document.getElementById("scream");
   ctx.drawImage(img, 0, 0);
   imgData = ctx.getImageData(0, 0, c.width, c.height);
   console.log('jeden');
   return;
 }
-function search_map(lx,ly,v = 0.001, n, gang = "") {
+
+async function search_map(lx,ly,v = 0.001, n, gang = "") {
     if(imgData == null) {
-      Promise.create_canvas();
+      await create_canvas();
       console.log('dwa');
     }
     const x = Math.round(((2234 + parseInt(lx))/4116)* 500) * 4;
@@ -137,9 +141,25 @@ function search_map(lx,ly,v = 0.001, n, gang = "") {
     }
 }
 
-function view_map(x,y,gang)
+async function view_map(gang, zones, notes)
 {
+  if(imgData == null) {
+    await create_canvas();
+  }
 
+  for (let i = 0; i < notes; i += 2) {
+    addNotification(notes[i], notes[i+1])
+  }
+  
+  let map = imgData;
+  $(".title").html("Gang: " + gang);
+  $(".container").css("display","flex");
+  for (let i = 0; i < map.data.length; i += 4) {
+    if(map.data[i] == 0) map.data[i+3] = 0;
+    else {
+      
+    } 
+  }
 }
 
 function addNotification(title, description) {

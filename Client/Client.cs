@@ -24,6 +24,7 @@ namespace c_zones_influence
 
             Events.RegisterEventHandler("c-zones-influence:setgang", Func.Create<string>(setgang), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:influence", Func.Create<double, string>(start_influence), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:nui_open", Func.Create<dynamic>(nui_open), Binding.All);
             //setgang("Vagos"); //test
 
             Natives.RegisterNuiCallbackType("c_influence");
@@ -34,7 +35,8 @@ namespace c_zones_influence
 
             EventHandlers["QBCore:Client:OnGangUpdate"] += Func.Create<string>(setgang);
 
-            Natives.RegisterCommand("test", new Action(test), false);
+            Natives.RegisterCommand("test-old", new Action(test), false);
+            Natives.RegisterCommand("test", new Action(test2), false);
         }
         private void addnote(string zone, string note) 
         {
@@ -90,14 +92,30 @@ namespace c_zones_influence
                 Natives.SendNuiMessage("{\"action\":\"check\",\"x\":" + coords[0].ToString() + ", \"y\":" + coords[1].ToString() + "}");
             }
         }
-
+        private void test2() 
+        {
+            Events.TriggerServerEvent("c-zones-influence:server:nui_open");
+        }
         private void test()
         {
             Debug.WriteLine(Natives.GetPlayerServerId(Natives.PlayerId()).ToString());
             setgang("vagos");
             Vector3 coords = Natives.GetEntityCoords(Natives.PlayerPedId(), false);
             Natives.SetNuiFocus(true, true);
-            Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"gang\":\""+ gang + "\"}");
+            //Natives.SendNuiMessage("{\"action\":\"start\",\"x\":"+ coords[0].ToString() + ", \"y\":" + coords[1].ToString() + ", \"gang\":\""+ gang + "\"}");
+            Events.TriggerServerEvent("c-zones-influence:getzones", new Action<object>((arg) => {
+                Debug.WriteLine("working 10da");
+                Debug.WriteLine(arg.ToString());
+            }));
+            
+            Natives.SendNuiMessage("{\"action\":\"map\", \"gang\":\"" + gang + "\"}");
+        }
+
+        private void nui_open(dynamic zones) 
+        {
+            Debug.WriteLine(zones.ToString());
+            Debug.WriteLine("Pewnie to nie będzie dizałać");
+            Natives.SendNuiMessage("{\"action\":\"map\", \"gang\":\"" + gang + "\"}");
         }
 
         private void start_influence(double val = 0.001, string note = "")

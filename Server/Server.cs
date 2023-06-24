@@ -4,7 +4,6 @@ using CitizenFX.Server.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Server
 {
@@ -23,10 +22,8 @@ namespace Server
             Events.RegisterEventHandler("c-zones-influence:alarmplayer", Func.Create<string, string, string>(alarmplayer), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:setzones", Func.Create<dynamic>(setzones), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string, string, string>(influence), Binding.All);
-            Natives.RegisterCommand("testargs", new Action(() =>
-            {
-                alarmplayer("vagos", "Ktoś sprzedaje narkotyki na twojej okolicy!", "Rancho");
-            }), false);
+            Events.RegisterEventHandler("c-zones-influence:server:nui_open", Func.Create<Player>(command), Binding.All);
+            Natives.RegisterCommand("test123", Func.Create<Player>(command), false);
         }
 
         private void setzones(dynamic data) 
@@ -141,6 +138,11 @@ namespace Server
             {
                 Debug.WriteLine("Key = {0}, Value = {1}", v.Value.gang, v.Value.val);
             }
+        }
+
+        private void command([Source] Player source) 
+        {
+            Events.TriggerClientEvent("c-zones-influence:nui_open", source, Zones);
         }
 
     }
