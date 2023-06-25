@@ -4,6 +4,7 @@ using CitizenFX.Server.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 
 namespace Server
 {
@@ -142,7 +143,16 @@ namespace Server
 
         private void command([Source] Player source) 
         {
-            Events.TriggerClientEvent("c-zones-influence:nui_open", source, Zones);
+            string json = "{";
+            foreach (KeyValuePair<int, Zone> v in Zones)
+            {
+                json += "\'"+ v.Key + "\': [\'" + v.Value.gang + "\',\'" + v.Value.val +"\'],";
+                //Debug.WriteLine("Key = {0}, Value = {1}, Value = {2}", v.Key, v.Value.gang, v.Value.val);
+            }
+            json = json.Remove(json.Length - 1) + "}";
+            Debug.WriteLine(json);
+
+            Events.TriggerClientEvent("c-zones-influence:nui_open", source, json);
         }
 
     }

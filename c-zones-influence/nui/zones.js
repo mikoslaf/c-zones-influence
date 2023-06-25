@@ -1,4 +1,4 @@
-import { gang_color } from "config.js";
+//import { gang_color } from "config.js";
 const zones = {
   1:"none",
   4:"Richman",
@@ -44,7 +44,7 @@ window.addEventListener("message", function (event) {
     if(event.data.action == "check") {
      search_map(event.data.x, event.data.y, event.data.v, event.data.n)
     } else if (event.data.action == "map") {
-      search_map(event.data.x, event.data.gang)
+      view_map(event.data.gang, event.data.zones)
     }else if (event.data.action == "start") {
       search_map(event.data.x, event.data.y, event.data.v, "", event.data.gang)
     }
@@ -143,6 +143,11 @@ async function search_map(lx,ly,v = 0.001, n, gang = "") {
 
 async function view_map(gang, zones, notes)
 {
+  zones = zones.replaceAll("\'","\"");
+  zones  = '{"1": ["none","0"],"2": ["none","0"],"4": ["none","0"],"193": ["none","0"],"130": ["none","0"],"67": ["none","0"],"200": ["none","0"],"137": ["none","0"],"74": ["none","0"],"11": ["none","0"],"207": ["none","0"],"144": ["vagos","0.013"],"81": ["none","0"],"18": ["none","0"],"214": ["none","0"],"151": ["none","0"],"88": ["none","0"],"25": ["vagos","0.01"],"221": ["none","0"],"158": ["vagos","0.01"],"95": ["none","0"],"32": ["none","0"],"228": ["none","0"],"165": ["none","0"],"102": ["none","0"],"39": ["none","0"],"235": ["vagos","0.01"],"172": ["vagos","0.01"],"109": ["none","0"],"46": ["none","0"],"179": ["none","0"],"116": ["none","0"],"53": ["none","0"],"249": ["none","0"],"186": ["none","0"],"123": ["none","0"],"60": ["none","0"]}';
+  console.log(zones);
+  zones = JSON.parse(zones);
+  console.log(zones["1"][0]);
   if(imgData == null) {
     await create_canvas();
   }
@@ -152,14 +157,17 @@ async function view_map(gang, zones, notes)
   }
   
   let map = imgData;
-  $(".title").html("Gang: " + gang);
-  $(".container").css("display","flex");
   for (let i = 0; i < map.data.length; i += 4) {
     if(map.data[i] == 0) map.data[i+3] = 0;
     else {
       
     } 
   }
+
+  ctx.putImageData(map, 0, 0);
+  $(".title").html("Gang: " + gang);
+  $(".container").css("display","flex");
+
 }
 
 function addNotification(title, description) {

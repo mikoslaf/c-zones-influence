@@ -24,7 +24,7 @@ namespace c_zones_influence
 
             Events.RegisterEventHandler("c-zones-influence:setgang", Func.Create<string>(setgang), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:influence", Func.Create<double, string>(start_influence), Binding.All);
-            Events.RegisterEventHandler("c-zones-influence:nui_open", Func.Create<dynamic>(nui_open), Binding.All);
+            Events.RegisterEventHandler("c-zones-influence:nui_open", Func.Create<string>(nui_open), Binding.All);
             //setgang("Vagos"); //test
 
             Natives.RegisterNuiCallbackType("c_influence");
@@ -111,11 +111,10 @@ namespace c_zones_influence
             Natives.SendNuiMessage("{\"action\":\"map\", \"gang\":\"" + gang + "\"}");
         }
 
-        private void nui_open(dynamic zones) 
+        private void nui_open(string zones) 
         {
-            Debug.WriteLine(zones.ToString());
-            Debug.WriteLine("Pewnie to nie będzie dizałać");
-            Natives.SendNuiMessage("{\"action\":\"map\", \"gang\":\"" + gang + "\"}");
+            Debug.WriteLine(zones);
+            Natives.SendNuiMessage("{\"action\":\"map\", \"zones\":\"" + zones + "\", \"gang\":\"" + gang + "\"}");
         }
 
         private void start_influence(double val = 0.001, string note = "")

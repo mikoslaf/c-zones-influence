@@ -1,4 +1,4 @@
-const gang_color = {
+export const gang_color = {
     "lostmc":[159,52,38], //rgb
     "ballas":[49,2,68],
     "vagos":[235,228,5],
