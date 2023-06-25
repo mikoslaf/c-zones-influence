@@ -146,6 +146,7 @@ namespace Server
             string json = "{";
             foreach (KeyValuePair<int, Zone> v in Zones)
             {
+                if(v.Value.val > 0.20)
                 json += "\'"+ v.Key + "\': [\'" + v.Value.gang + "\',\'" + v.Value.val +"\'],";
                 //Debug.WriteLine("Key = {0}, Value = {1}, Value = {2}", v.Key, v.Value.gang, v.Value.val);
             }

@@ -1,5 +1,5 @@
-export const gang_color = {
-    "lostmc":[159,52,38], //rgb
+{
+    "lostmc":[159,52,38],
     "ballas":[49,2,68],
     "vagos":[235,228,5],
     "cartel":[189,135,5],
