@@ -53,6 +53,8 @@ $( function() {
   $(".close-button").on("click", () => {
     $(".container").css("display","none");
     $.post("https://c-zones-influence/c_close", JSON.stringify({}));
+    $(".notification-container").html("");
+    create_canvas();
   });
 });
 
@@ -69,21 +71,18 @@ obraz
 x = 900 | 500
 y = 1400 | 500
  */
-
 async function create_canvas() {
   const c = document.getElementById("myCanvas");
   ctx = c.getContext("2d");
   const img = document.getElementById("scream");
   ctx.drawImage(img, 0, 0);
   imgData = ctx.getImageData(0, 0, c.width, c.height);
-  console.log('jeden');
   return;
 }
 
 async function search_map(lx,ly,v = 0.001, n, gang = "") {
     if(imgData == null) {
       await create_canvas();
-      console.log('dwa');
     }
     const x = Math.round(((2234 + parseInt(lx))/4116)* 500) * 4;
     const y = Math.round((1 - ((3415 + parseInt(ly))/3875)) * 500) * 500 * 4;
@@ -144,17 +143,22 @@ async function search_map(lx,ly,v = 0.001, n, gang = "") {
 async function view_map(gang, zones, notes)
 {
   zones = zones.replaceAll("\'","\"");
-  zones  = '{"1": ["none","0"],"2": ["nda","0.8"],"4": ["vagos","0.6"],"193": ["inny","1"],"130": ["noda","0.9"],"67": ["ballas","0.8"],"200": ["ballas","0.9"],"137": ["none","0"],"74": ["none","0"],"11": ["none","0"],"207": ["vagos","0.35"],"144": ["vagos","0.413"],"81": ["none","0"],"18": ["none","0"],"214": ["none","0"],"151": ["none","0"],"88": ["triads","0.5"],"25": ["vagos","0.01"],"221": ["triads","1"],"158": ["vagos","0.01"],"95": ["triads","0.75"],"32": ["none","0"],"228": ["none","0"],"165": ["none","0"],"102": ["none","0"],"39": ["none","0"],"235": ["vagos","0.01"],"172": ["vagos","0.01"],"109": ["none","0"],"46": ["none","0"],"179": ["none","0"],"116": ["none","0"],"53": ["none","0"],"249": ["none","0"],"186": ["none","0"],"123": ["none","0"],"60": ["none","0"]}';
+  zones  = '{"1": ["none","0"],"2": ["nda","0.8"],"4": ["vagos","0.6"],"193": ["inny","1"],"130": ["police","0.3"],"67": ["ballas","0.8"],"200": ["ballas","0.9"],"137": ["none","0"],"74": ["none","0"],"11": ["none","0"],"207": ["vagos","0.35"],"144": ["vagos","0.413"],"81": ["none","0"],"18": ["none","0"],"214": ["none","0"],"151": ["none","0"],"88": ["triads","0.5"],"25": ["vagos","0.01"],"221": ["triads","1"],"158": ["vagos","0.01"],"95": ["triads","0.75"],"32": ["none","0"],"228": ["none","0"],"165": ["none","0"],"102": ["none","0"],"39": ["vagos","0.9"],"235": ["vagos","1"],"172": ["vagos","0.01"],"109": ["none","0"],"46": ["none","0"],"179": ["none","0"],"116": ["none","0"],"53": ["none","0"],"249": ["none","0"],"186": ["none","0"],"123": ["none","0"],"60": ["none","0"]}';
   zones = JSON.parse(zones);
   if(imgData == null) {
     await create_canvas();
   }
-
+  let not = true; 
   for (let i = 0; i < notes; i += 2) {
+    not = false; 
     addNotification(notes[i], notes[i+1])
   }
-  let map = imgData;
+  if(not)
+  {
+    addNotification("No notifications", "You do not have any notifications");
+  }
   $.getJSON("config.json", function(gangs) {
+    const map = imgData;
     for (let i = 0; i < map.data.length; i += 4) {
       if(zones[map.data[i].toString()] != undefined) {
         const zone = zones[map.data[i].toString()];
@@ -167,15 +171,20 @@ async function view_map(gang, zones, notes)
           map.data[i+1] = gangs[zone[0]][1];
           map.data[i+2] = gangs[zone[0]][2];
         }
-        map.data[i+3] = parseFloat(zone[1]) * 0.80 * 255;
+        map.data[i+3] = parseFloat(zone[1]) * 0.7 * 255;
       }
       else {
         map.data[i+3] = 0;
       } 
     }
-
   ctx.putImageData(map, 0, 0);
+
+  let cont = 0; 
+  for (const [_, value] of Object.entries(zones)) {
+    if(value[0] == gang && parseFloat(value[1]) > 0.8) cont++;
+  }
   $(".title").html("Gang: " + gang);
+  $(".description:first").html("Your gang has "+cont+" occupied zones.");
   $(".container").css("display","flex");
   });
 }
@@ -195,5 +204,5 @@ function addNotification(title, description) {
   notification.appendChild(titleElement);
   notification.appendChild(descriptionElement);
 
-  notificationContainer.appendChild(notification);
+  document.querySelector(".notification-container").appendChild(notification);
 }

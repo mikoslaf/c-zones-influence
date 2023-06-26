@@ -113,7 +113,8 @@ namespace c_zones_influence
 
         private void nui_open(string zones) 
         {
-            Debug.WriteLine(zones);
+            setgang("vagos");
+            Natives.SetNuiFocus(true, true);
             Natives.SendNuiMessage("{\"action\":\"map\", \"zones\":\"" + zones + "\", \"gang\":\"" + gang + "\"}");
         }
 

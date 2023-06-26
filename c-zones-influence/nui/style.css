@@ -61,7 +61,7 @@ body {
 }
 .title {
     font-size: 24px;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
     color: #000000;
 }
   
@@ -110,6 +110,10 @@ body {
     color: black;
     box-shadow: inset 0px 0px 15px 1px rgba(10, 10, 10, 0.2);
     border-radius: 5px;
+}
+
+.notification:last-child {
+    margin: 0;
 }
   
 .notification .title-p {
