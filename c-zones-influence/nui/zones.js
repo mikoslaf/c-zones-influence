@@ -1,4 +1,3 @@
-import { gang_color } from "config";
 const zones = {
   1:"none",
   4:"Richman",
@@ -49,6 +48,7 @@ window.addEventListener("message", function (event) {
       search_map(event.data.x, event.data.y, event.data.v, "", event.data.gang)
     }
 });
+
 $( function() {
   $(".close-button").on("click", () => {
     $(".container").css("display","none");
@@ -144,7 +144,7 @@ async function search_map(lx,ly,v = 0.001, n, gang = "") {
 async function view_map(gang, zones, notes)
 {
   zones = zones.replaceAll("\'","\"");
-  zones  = '{"1": ["none","0"],"2": ["none","0"],"4": ["vagos","0.6"],"193": ["none","0"],"130": ["none","0"],"67": ["ballas","0.8"],"200": ["ballas","0.9"],"137": ["none","0"],"74": ["none","0"],"11": ["none","0"],"207": ["vagos","0.35"],"144": ["vagos","0.413"],"81": ["none","0"],"18": ["none","0"],"214": ["none","0"],"151": ["none","0"],"88": ["none","0"],"25": ["vagos","0.01"],"221": ["none","0"],"158": ["vagos","0.01"],"95": ["none","0"],"32": ["none","0"],"228": ["none","0"],"165": ["none","0"],"102": ["none","0"],"39": ["none","0"],"235": ["vagos","0.01"],"172": ["vagos","0.01"],"109": ["none","0"],"46": ["none","0"],"179": ["none","0"],"116": ["none","0"],"53": ["none","0"],"249": ["none","0"],"186": ["none","0"],"123": ["none","0"],"60": ["none","0"]}';
+  zones  = '{"1": ["none","0"],"2": ["nda","0.8"],"4": ["vagos","0.6"],"193": ["inny","1"],"130": ["noda","0.9"],"67": ["ballas","0.8"],"200": ["ballas","0.9"],"137": ["none","0"],"74": ["none","0"],"11": ["none","0"],"207": ["vagos","0.35"],"144": ["vagos","0.413"],"81": ["none","0"],"18": ["none","0"],"214": ["none","0"],"151": ["none","0"],"88": ["triads","0.5"],"25": ["vagos","0.01"],"221": ["triads","1"],"158": ["vagos","0.01"],"95": ["triads","0.75"],"32": ["none","0"],"228": ["none","0"],"165": ["none","0"],"102": ["none","0"],"39": ["none","0"],"235": ["vagos","0.01"],"172": ["vagos","0.01"],"109": ["none","0"],"46": ["none","0"],"179": ["none","0"],"116": ["none","0"],"53": ["none","0"],"249": ["none","0"],"186": ["none","0"],"123": ["none","0"],"60": ["none","0"]}';
   zones = JSON.parse(zones);
   if(imgData == null) {
     await create_canvas();
@@ -153,27 +153,31 @@ async function view_map(gang, zones, notes)
   for (let i = 0; i < notes; i += 2) {
     addNotification(notes[i], notes[i+1])
   }
-  
   let map = imgData;
-  for (let i = 0; i < map.data.length; i += 4) {
-    if(zones[map.data[i].toString()] != undefined) {
-      const zone = zones[map.data[i].toString()];
-      if(parseFloat(zone[1]) > 0.25)
-      {
-        map.data[i+3] = parseFloat(zone[1])*255;
-      }else{
-        map.data[i+3] = 0;
+  $.getJSON("config.json", function(gangs) {
+    for (let i = 0; i < map.data.length; i += 4) {
+      if(zones[map.data[i].toString()] != undefined) {
+        const zone = zones[map.data[i].toString()];
+        if(gangs[zone[0]] == undefined) {
+          map.data[i] = 169;
+          map.data[i+1] = 169;
+          map.data[i+2] = 169;
+        } else {
+          map.data[i] = gangs[zone[0]][0];
+          map.data[i+1] = gangs[zone[0]][1];
+          map.data[i+2] = gangs[zone[0]][2];
+        }
+        map.data[i+3] = parseFloat(zone[1]) * 0.80 * 255;
       }
+      else {
+        map.data[i+3] = 0;
+      } 
     }
-    else {
-      map.data[i+3] = 0;
-    } 
-  }
 
   ctx.putImageData(map, 0, 0);
   $(".title").html("Gang: " + gang);
   $(".container").css("display","flex");
-
+  });
 }
 
 function addNotification(title, description) {

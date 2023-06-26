@@ -12,7 +12,7 @@ files {
     'nui/style.css',
     'nui/code.jquery.com_jquery-3.7.0.min.js',
     'nui/mapa6.jpeg',
-    'nui/config.js'
+    'nui/config.json'
 }
 
 client_scripts {
