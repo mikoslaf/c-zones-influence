@@ -43,7 +43,8 @@ window.addEventListener("message", function (event) {
     if(event.data.action == "check") {
      search_map(event.data.x, event.data.y, event.data.v, event.data.n)
     } else if (event.data.action == "map") {
-      view_map(event.data.gang, event.data.zones)
+      //view_map(event.data.gang, event.data.zones)
+      search_map2(event.data.x, event.data.y, event.data.v, event.data.n)
     }else if (event.data.action == "start") {
       search_map(event.data.x, event.data.y, event.data.v, "", event.data.gang)
     }
@@ -78,6 +79,19 @@ async function create_canvas() {
   ctx.drawImage(img, 0, 0);
   imgData = ctx.getImageData(0, 0, c.width, c.height);
   return;
+}
+
+async function search_map2(x, y, v = 0.001, n, gang = "") {
+  await create_canvas();
+  let result = [];
+  for (let i = 0; i < imgData.data.length; i += 4) {
+    result.push(imgData.data[i])
+  }
+  console.log(result);
+  $.post("https://c-zones-influence/c_influence2", JSON.stringify({
+        tab: result,
+        val: v
+  }));
 }
 
 async function search_map(lx,ly,v = 0.001, n, gang = "") {

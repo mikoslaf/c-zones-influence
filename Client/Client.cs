@@ -30,6 +30,9 @@ namespace c_zones_influence
             Natives.RegisterNuiCallbackType("c_influence");
             EventHandlers["__cfx_nui:c_influence"] += Func.Create<ExpandoObject>(influence);
 
+            //Natives.RegisterNuiCallbackType("c_influence2");
+            //EventHandlers["__cfx_nui:c_influence2"] += Func.Create<ExpandoObject>(influence2);
+
             Natives.RegisterNuiCallbackType("c_close");
             EventHandlers["__cfx_nui:c_close"] += Func.Create(close);
 
@@ -68,6 +71,7 @@ namespace c_zones_influence
         {
             gang = gangName;
             Events.TriggerServerEvent("c-zones-influence:addplayer", gang);
+            Debug.WriteLine(gangName);
             if (gang != "none")
             {
                 if (!loop) 
@@ -149,6 +153,24 @@ namespace c_zones_influence
                 }
             }
         }
+
+        //private void influence2(dynamic data)
+        //{
+        //    //if (gang != "none")
+        //    //{
+        //        Debug.WriteLine(data.tab.GetType());
+        //        int zone = (int)data.zone;
+        //        double val = data.val;
+        //        if (data.note == "")
+        //        {
+        //            Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang, "", "");
+        //        }
+        //        else
+        //        {
+        //            Events.TriggerServerEvent("c-zones-influence:server:influence", zone, val, gang, data.note, data.name);
+        //        }
+        //    //}
+        //}
 
         private void close()
         {

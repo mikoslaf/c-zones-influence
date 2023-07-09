@@ -4,7 +4,6 @@ using CitizenFX.Server.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 
 namespace Server
 {
@@ -24,7 +23,8 @@ namespace Server
             Events.RegisterEventHandler("c-zones-influence:setzones", Func.Create<dynamic>(setzones), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:server:influence", Func.Create<int, double, string, string, string>(influence), Binding.All);
             Events.RegisterEventHandler("c-zones-influence:server:nui_open", Func.Create<Player>(command), Binding.All);
-            Natives.RegisterCommand("test123", Func.Create<Player>(command), false);
+            Events.TriggerEvent("qb-handler:c-zones-influence:setzones");
+            //Natives.RegisterCommand("test123", Func.Create<Player>(command), false);
         }
 
         private void setzones(dynamic data) 
