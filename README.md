@@ -34,7 +34,7 @@ Players, who are members of an organization can check the influence map.
 ### From a Release Build
 
 - Download the [latest version](https://github.com/mikoslaf/c-zones-influence/releases/tag/v1.0)
-- Run the sql file `zones_influence.sql` in your server database.
+- Run the sql file `zones_influence.sql` in your server database
 - Add `c-zones-influence` directory to the `resources` directory on the FiveM server
 - Add the following directive to your FiveM ```server.cfg``` file
 ```
